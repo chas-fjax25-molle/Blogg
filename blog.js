@@ -157,8 +157,8 @@ function blogPage() {
         if (post) {
             renderFullPost(post);
         } else {
-            // TODO
-            console.error("Blog post not found.");
+            const postContainer = document.querySelector(".blog-post-container");
+            postContainer.innerHTML = "<p alt='Blog post not found.', class='missing-post'>Blog post not found.</p>";
         }
     } else {
         // TODO
