@@ -52,7 +52,7 @@ header {
     margin: 0;
 }
 
-.post-image {
+.post-image-preview {
     grid-area: image;
     max-width: 100%;
     height: auto;
@@ -106,6 +106,7 @@ header {
     margin-left: 1rem;
     display: grid;
     grid-template-columns: auto auto auto;
+    align-items: center;
 }
 
 .post-content {
