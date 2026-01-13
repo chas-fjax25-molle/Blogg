@@ -99,7 +99,7 @@ const blogPosts = [
 
 // Determine which page to render based on the current URL
 const currentPage = window.location.pathname;
-if (currentPage === "/index.html") {
+if (currentPage === "/index.html" || currentPage === "/") {
     mainPage();
 } else if (currentPage === "/post.html") {
     blogPage();
