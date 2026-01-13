@@ -171,6 +171,21 @@ function blogPage() {
  * @param {BlogPost} post 
 */
 function renderFullPost(post) {
-    // TODO
-    img / blog.jpg
+    const postElement = document.createElement("article");
+    postElement.className = "full-post";
+    postElement.id = `post-${post.id}`;
+    postElement.innerHTML = `
+        <h2 class="post-title">${post.title}</h2>
+        <p class="post-author">By ${post.author}</p>
+        <p class="post-date">Published on ${post.date}</p>
+        <p class="post-category">Category: ${post.category}</p>
+        <p class="post-content">${post.content}</p>
+        <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="300" height="200"/>
+    `;
+    const postContainer = document.querySelector(".blog-post-container");
+    if (!postContainer) {
+        console.error("Blog post container not found.");
+        return;
+    }
+    postContainer.appendChild(postElement);
 }
