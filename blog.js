@@ -177,7 +177,7 @@ function renderFullPost(post) {
     postElement.innerHTML = `
         <h2 class="post-title">${post.title}</h2>
         <p class="post-author">By ${post.author}</p>
-        <p class="post-date">Published on ${post.date}</p>
+        <time class="post-date" datetime="${post.date}">Published on ${post.date}</time>
         <p class="post-category">Category: ${post.category}</p>
         <p class="post-content">${post.content}</p>
         <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="300" height="200"/>
