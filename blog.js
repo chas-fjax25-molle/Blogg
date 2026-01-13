@@ -1,3 +1,19 @@
+/**
+ * @typedef {Object} BlogPost
+ * @property {number} id - Unique identifier for the blog post
+ * @property {string} title - Title of the blog post
+ * @property {string} except - Short excerpt of the blog post
+ * @property {string} content - Full content of the blog post
+ * @property {string} author - Author of the blog post
+ * @property {string} date - Publication date of the blog post
+ * @property {string} category - Category of the blog post
+ * @property {string} image - Image URL for the blog post
+ */
+
+/**
+ * Blog post data structure
+ * @type {BlogPost[]}
+ */
 const blogPosts = [
     {
         id: 1,
@@ -80,3 +96,65 @@ const blogPosts = [
         image: "placeholder.jpg"
     }
 ];
+
+// Determine which page to render based on the current URL
+const currentPage = window.location.pathname;
+if (currentPage === "/index.html") {
+    mainPage();
+} else if (currentPage === "/post.html") {
+    blogPage();
+} else {
+    // Do nothing
+}
+
+/**
+ * Handles the main page rendering
+*/
+function mainPage() {
+    renderPostPreviews();
+}
+
+/**
+ * Renders previews of all blog posts on the main page.
+*/
+function renderPostPreviews() {
+    blogPosts.forEach(post => {
+        renderPostPreview(post);
+    });
+}
+
+/**
+ * Renders a preview of a single blog post.
+ * @param {BlogPost} post 
+*/
+function renderPostPreview(post) {
+    // TODO
+}
+
+/**
+ * Handles the blog post page rendering
+*/
+function blogPage() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("id")) {
+        const postId = parseInt(params.get("id"));
+        const post = blogPosts.find(p => p.id === postId);
+        if (post) {
+            renderFullPost(post);
+        } else {
+            // TODO
+            console.error("Blog post not found.");
+        }
+    } else {
+        // TODO
+        console.error("No ID parameter found in the URL.");
+    }
+}
+
+/**
+ * Renders the full blog post on its separate page.
+ * @param {BlogPost} post 
+*/
+function renderFullPost(post) {
+    // TODO
+}
