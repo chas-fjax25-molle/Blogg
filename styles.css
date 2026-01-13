@@ -120,8 +120,4 @@ header {
         grid-template-columns: 1fr;
         grid-template-areas: "image" "meta" "content";
     }
-
-    .post-content {
-        grid-column: 1 / -1;
-    }
 }
