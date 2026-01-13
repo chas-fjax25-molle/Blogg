@@ -141,6 +141,7 @@ function renderPostPreview(post) {
         <h3 class="post-title">${post.title}</h3>
         <p class="post-excerpt">${post.excerpt}</p>
         <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="100" height="100"/>
+        <button class="read-more-button" onclick="window.location.href='post.html?id=${post.id}'" aria-label="Read More">Read More</button>
     `;
     postContainer.appendChild(postElement);
 }
@@ -171,4 +172,5 @@ function blogPage() {
 */
 function renderFullPost(post) {
     // TODO
+    img / blog.jpg
 }
