@@ -2,7 +2,7 @@
  * @typedef {Object} BlogPost
  * @property {number} id - Unique identifier for the blog post
  * @property {string} title - Title of the blog post
- * @property {string} except - Short excerpt of the blog post
+ * @property {string} excerpt - Short excerpt of the blog post
  * @property {string} content - Full content of the blog post
  * @property {string} author - Author of the blog post
  * @property {string} date - Publication date of the blog post
@@ -18,7 +18,7 @@ const blogPosts = [
     {
         id: 1,
         title: "Understanding JavaScript Closures",
-        except: "A deep dive into closures in JavaScript and how they work under the hood.",
+        excerpt: "A deep dive into closures in JavaScript and how they work under the hood.",
         content: "Closures are a fundamental concept in JavaScript that allow functions to access variables from an enclosing scope, even after that scope has closed. This is particularly useful for creating private variables and functions. In this post, we will explore how closures work, with examples and practical use cases.",
         author: "Jane Doe",
         date: "2024-05-10",
@@ -28,7 +28,7 @@ const blogPosts = [
     {
         id: 2,
         title: "Getting Started with React Hooks",
-        except: "Learn how to use React Hooks to manage state and side effects in functional components.",
+        excerpt: "Learn how to use React Hooks to manage state and side effects in functional components.",
         content: "React Hooks revolutionized the way we write React components by allowing us to use state and other React features without writing a class. In this guide, we'll cover useState, useEffect, and custom hooks with practical examples.",
         author: "John Smith",
         date: "2024-06-15",
@@ -38,7 +38,7 @@ const blogPosts = [
     {
         id: 3,
         title: "CSS Grid Layout Essentials",
-        except: "Master the fundamentals of CSS Grid for creating responsive layouts.",
+        excerpt: "Master the fundamentals of CSS Grid for creating responsive layouts.",
         content: "CSS Grid is a powerful layout system that makes it easy to create complex, responsive web designs. This tutorial covers grid containers, grid items, and how to use grid template areas effectively.",
         author: "Emily Johnson",
         date: "2024-07-20",
@@ -48,7 +48,7 @@ const blogPosts = [
     {
         id: 4,
         title: "Node.js Performance Optimization",
-        except: "Tips and techniques for improving your Node.js application performance.",
+        excerpt: "Tips and techniques for improving your Node.js application performance.",
         content: "Performance is critical for any Node.js application. In this post, we explore clustering, caching strategies, database query optimization, and profiling tools to help you build faster applications.",
         author: "Michael Chen",
         date: "2024-08-05",
@@ -68,7 +68,7 @@ const blogPosts = [
     {
         id: 6,
         title: "REST API Best Practices",
-        except: "Build better APIs with these proven design patterns and conventions.",
+        excerpt: "Build better APIs with these proven design patterns and conventions.",
         content: "Creating a well-designed REST API is essential for modern web applications. This article covers naming conventions, HTTP methods, status codes, versioning, and authentication strategies.",
         author: "David Brown",
         date: "2024-10-18",
@@ -78,7 +78,7 @@ const blogPosts = [
     {
         id: 7,
         title: "Async/Await in JavaScript",
-        except: "Simplify asynchronous code with async/await syntax.",
+        excerpt: "Simplify asynchronous code with async/await syntax.",
         content: "Async/await makes working with promises more intuitive and readable. We'll explore how to handle asynchronous operations, error handling with try/catch, and common patterns for concurrent requests.",
         author: "Lisa Martinez",
         date: "2024-11-25",
@@ -88,7 +88,7 @@ const blogPosts = [
     {
         id: 8,
         title: "Web Security Fundamentals",
-        except: "Protect your web applications from common security vulnerabilities.",
+        excerpt: "Protect your web applications from common security vulnerabilities.",
         content: "Security should be a priority in every web application. This comprehensive guide covers XSS, CSRF, SQL injection, authentication best practices, and how to implement secure headers.",
         author: "Robert Taylor",
         date: "2024-12-03",
@@ -118,6 +118,11 @@ function mainPage() {
  * Renders previews of all blog posts on the main page.
 */
 function renderPostPreviews() {
+    if (!document.querySelector(".blog-posts")) {
+        console.error("Blog posts container not found.");
+        return;
+    }
+
     blogPosts.forEach(post => {
         renderPostPreview(post);
     });
@@ -128,7 +133,16 @@ function renderPostPreviews() {
  * @param {BlogPost} post 
 */
 function renderPostPreview(post) {
-    // TODO
+    const postContainer = document.querySelector(".blog-posts");
+    const postElement = document.createElement("article");
+    postElement.className = "post-preview";
+    postElement.id = `post-${post.id}`;
+    postElement.innerHTML = `
+        <h3 class="post-title">${post.title}</h3>
+        <p class="post-excerpt">${post.excerpt}</p>
+        <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="100" height="100"/>
+    `;
+    postContainer.appendChild(postElement);
 }
 
 /**
