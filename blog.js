@@ -176,11 +176,15 @@ function renderFullPost(post) {
     postElement.id = `post-${post.id}`;
     postElement.innerHTML = `
         <h2 class="post-title">${post.title}</h2>
-        <p class="post-author">By ${post.author}</p>
-        <time class="post-date" datetime="${post.date}">Published on ${post.date}</time>
-        <p class="post-category">Category: ${post.category}</p>
-        <p class="post-content">${post.content}</p>
-        <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="300" height="200"/>
+        <div class="post-body">
+            <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="300" height="200"/>
+            <div class="post-meta">
+                <p class="post-author">By ${post.author}</p>
+                <time class="post-date" datetime="${post.date}">Published on ${post.date}</time>
+                <p class="post-category">Category: ${post.category}</p>
+            </div>
+            <p class="post-content">${post.content}</p>
+        </div>
     `;
     const postContainer = document.querySelector(".blog-post-container");
     if (!postContainer) {
