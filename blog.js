@@ -58,7 +58,7 @@ const blogPosts = [
     {
         id: 5,
         title: "Introduction to TypeScript",
-        except: "Discover how TypeScript adds type safety to your JavaScript projects.",
+        excerpt: "Discover how TypeScript adds type safety to your JavaScript projects.",
         content: "TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. Learn about type annotations, interfaces, generics, and how TypeScript can help you catch bugs before runtime.",
         author: "Sarah Williams",
         date: "2024-09-12",
