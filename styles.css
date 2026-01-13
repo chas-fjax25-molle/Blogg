@@ -106,6 +106,7 @@ header {
     margin-left: 1rem;
     display: grid;
     grid-template-columns: auto auto auto;
+    align-items: center;
 }
 
 .post-content {
