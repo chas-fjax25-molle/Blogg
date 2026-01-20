@@ -42,8 +42,11 @@ function renderCommentCount() {
  * TODO: add commentCount to post data
 */
 function renderPostPreview(post, postContainer) {
+    console.log("Post id = " + post.id);
+    console.log("ALLA:", comments);
+    console.log(typeof post.id);  // STRING! gjorde quick fix (rad 49)
     const postComments = comments.filter(
-      comment => comment.postId === post.id
+      comment => comment.postId === Number(post.id)
     );
     const commentCount = postComments.length;
     const postElement = document.createElement("article");
