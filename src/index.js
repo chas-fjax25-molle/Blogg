@@ -1,4 +1,3 @@
-import { blogPosts } from "./posts.js";
 import { comments } from "./comments.js";
 import { getPosts } from "./post_json_service.js";
 
@@ -22,29 +21,12 @@ function renderPostPreviews() {
 }
 
 /**
- * Renders comment count of all blog comments on the main page.
-*/
-function renderCommentCount() {
-    if (!document.querySelector(".blog-posts")) {
-        console.error("Blog posts container not found.");
-        return;
-    }
-
-    blogPosts.forEach(post => {
-        renderPostPreview(post, postContainer);
-    });
-}
-
-/**
  * Renders a preview of a single blog post.
  * @param {BlogPost} post
  * @param {HTMLElement} postContainer
  * TODO: add commentCount to post data
 */
 function renderPostPreview(post, postContainer) {
-    console.log("Post id = " + post.id);
-    console.log("ALLA:", comments);
-    console.log(typeof post.id);  // STRING! gjorde quick fix (rad 49)
     const postComments = comments.filter(
         comment => comment.postId === Number(post.id)
     );
