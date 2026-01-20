@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import eslint from "vite-plugin-eslint";
 
 export default defineConfig(({ command, mode }) => ({
     base: command === 'build' ? '/Blogg/' : '/',
@@ -18,7 +19,8 @@ export default defineConfig(({ command, mode }) => ({
                     { src: "pwa-512x512.png", sizes: "512x512", type: "image/png" }
                 ],
             }
-        })
+        }),
+        eslint()
     ],
     build: {
         rollupOptions: {
