@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:3000/posts";
+const POST_API_URL = "http://localhost:3000/posts";
+const COMMENTS_API_URL = "http://localhost:3000/comments";
 
 /**
  * @typedef {Object} Post
@@ -27,7 +28,7 @@ const API_URL = "http://localhost:3000/posts";
  */
 export async function getPosts() {
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(POST_API_URL);
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -53,7 +54,7 @@ export async function getPosts() {
  */
 export async function getPost(id) {
     try {
-        const response = await fetch(`${API_URL}/${id}`);
+        const response = await fetch(`${POST_API_URL}/${id}`);
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -75,7 +76,7 @@ export async function getPost(id) {
  */
 export async function createPost(postData) {
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(POST_API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -103,7 +104,7 @@ export async function createPost(postData) {
  */
 export async function getCommentsForPost(postId) {
     try {
-        const response = await fetch(`http://localhost:3000/comments?postId=${postId}`);
+        const response = await fetch(`${COMMENTS_API_URL}?postId=${postId}`);
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -126,7 +127,7 @@ export async function getCommentsForPost(postId) {
  */
 export async function addCommentToPost(postId, commentData) {
     try {
-        const response = await fetch(`http://localhost:3000/comments`, {
+        const response = await fetch(`${COMMENTS_API_URL}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
