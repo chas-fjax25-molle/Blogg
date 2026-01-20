@@ -17,8 +17,7 @@ function blogPage() {
             postContainer.innerHTML = "<p alt='Blog post not found.', class='missing-post'>Blog post not found.</p>";
         }
     } else {
-        // TODO
-        console.error("No ID parameter found in the URL.");
+        window.location.href = "index.html";
     }
 }
 

@@ -1,12 +1,12 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig({
-    base: "/Blogg/",
+export default defineConfig(({ command, mode }) => ({
+    base: command === 'build' ? '/Blogg/' : '/',
     plugins: [
         VitePWA({
             registerType: "autoUpdate",
-            devOptions: { enabled: true }, // valfritt: gör att det funkar i dev
+            devOptions: { enabled: true },
             manifest: {
                 name: "Blog",
                 short_name: "Blog",
@@ -29,4 +29,4 @@ export default defineConfig({
             }
         }
     }
-});
+}));

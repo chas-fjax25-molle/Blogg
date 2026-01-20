@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:gh": "vite build --base=/Blogg/",
     "preview": "vite preview",
     "api": "json-server --watch db.json --port 3001"
   },
