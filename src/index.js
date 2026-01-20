@@ -29,7 +29,14 @@ function renderPostPreview(post) {
         <h3 class="post-title">${post.title}</h3>
         <p class="post-excerpt">${post.excerpt}</p>
         <img class="post-image-preview" src="${post.image}" alt="Blog Post Image" width="100" height="100"/>
-        <button class="read-more-button" onclick="window.location.href='post.html?id=${post.id}'" aria-label="Read More">Read More</button>
+        <button class="read-more-button" data-post-id="${post.id}" aria-label="Read More">Read More</button>
     `;
+
+    // Add event listener properly instead of inline onclick
+    const button = postElement.querySelector(".read-more-button");
+    button.addEventListener("click", () => {
+        window.location.href = `post.html?id=${post.id}`;
+    });
+
     postContainer.appendChild(postElement);
 }
