@@ -22,10 +22,6 @@ export async function getPosts() {
 
     } catch (error) {
         console.error("Failed to fetch posts:", error);
-
-        // Viktigt för PWA:
-        // Vi kastar felet vidare så UI kan avgöra
-        // om data ska hämtas från cache / visa offline-meddelande
         throw error;
     }
 }
