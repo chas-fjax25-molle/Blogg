@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+    base: "/Blogg/",
     plugins: [
         VitePWA({
             registerType: "autoUpdate",
@@ -9,7 +10,6 @@ export default defineConfig({
             manifest: {
                 name: "Blog",
                 short_name: "Blog",
-                base: "/Blogg/",
                 display: "standalone",
                 theme_color: "#ffffff",
                 background_color: "#ffffff",
