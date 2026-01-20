@@ -140,7 +140,7 @@ function renderPostPreview(post) {
     postElement.innerHTML = `
         <h3 class="post-title">${post.title}</h3>
         <p class="post-excerpt">${post.excerpt}</p>
-        <img class="post-image-preview" src="img/${post.image}" alt="Blog Post Image" width="100" height="100"/>
+        <img class="post-image-preview" src="${post.image}" alt="Blog Post Image" width="100" height="100"/>
         <button class="read-more-button" onclick="window.location.href='post.html?id=${post.id}'" aria-label="Read More">Read More</button>
     `;
     postContainer.appendChild(postElement);
@@ -177,7 +177,7 @@ function renderFullPost(post) {
     postElement.innerHTML = `
         <h2 class="post-title">${post.title}</h2>
         <div class="post-body">
-            <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="300" height="200"/>
+            <img class="post-image" src="${post.image}" alt="Blog Post Image" width="300" height="200"/>
             <div class="post-meta">
                 <p class="post-author">By ${post.author}</p>
                 <time class="post-date" datetime="${post.date}">Published on ${post.date}</time>
