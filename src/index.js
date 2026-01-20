@@ -1,6 +1,6 @@
 import { blogPosts } from "./posts.js";
 import { comments } from "./comments.js";
-import { getPosts, createPostElement } from "./post_json_service.js";
+import { getPosts } from "./post_json_service.js";
 
 renderPostPreviews();
 
@@ -9,7 +9,7 @@ renderPostPreviews();
 */
 function renderPostPreviews() {
     const postContainer = document.querySelector(".blog-posts");
-    
+
     if (!document.querySelector(".blog-posts")) {
         console.error("Blog posts container not found.");
         return;
@@ -46,7 +46,7 @@ function renderPostPreview(post, postContainer) {
     console.log("ALLA:", comments);
     console.log(typeof post.id);  // STRING! gjorde quick fix (rad 49)
     const postComments = comments.filter(
-      comment => comment.postId === Number(post.id)
+        comment => comment.postId === Number(post.id)
     );
     const commentCount = postComments.length;
     const postElement = document.createElement("article");
