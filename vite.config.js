@@ -10,6 +10,7 @@ export default defineConfig({
                 name: "Blog",
                 short_name: "Blog",
                 start_url: "/",
+                base: "/Blogg/",
                 display: "standalone",
                 theme_color: "#ffffff",
                 background_color: "#ffffff",
