@@ -55,7 +55,7 @@ function renderFullPost(post) {
     postContainer.appendChild(postElement);
 
     const commentList = postElement.querySelector(".comment-list");
-    const postComments = comments.filter(c => c.postId === post.id);
+    const postComments = comments.filter(c => c.postId === Number(post.id));
     postComments.forEach(comment => {
         const li = document.createElement("li");
         li.className = "comment";
