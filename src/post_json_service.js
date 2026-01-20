@@ -121,18 +121,17 @@ export async function getCommentsForPost(postId) {
 
 /**
  * Adds a comment to a specific post.
- * @param {number} postId
- * @param {Comment} commentData
+ * @param {Comment} commentData - Comment object that includes postId
  * @returns {Promise<Comment>} The created comment object.
  */
-export async function addCommentToPost(postId, commentData) {
+export async function addCommentToPost(commentData) {
     try {
         const response = await fetch(`${COMMENTS_API_URL}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ ...commentData, postId })
+            body: JSON.stringify(commentData)
         });
 
         if (!response.ok) {
@@ -143,7 +142,7 @@ export async function addCommentToPost(postId, commentData) {
         return newComment;
 
     } catch (error) {
-        console.error(`Failed to add comment to post with id ${postId}:`, error);
+        console.error(`Failed to add comment to post with id ${commentData.postId}:`, error);
         throw error;
     }
 }
