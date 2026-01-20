@@ -1,4 +1,14 @@
 /**
+ * @typedef {Object} Comment
+ * @property {number} id - Unique identifier for comment post
+ * @property {number} postId - Identifier for the post connected to the comment
+ * @property {string} author - The author of the comment
+ * @property {string} text - The text content of the comment
+ * @property {string} date - The date of when the comment was created 
+ */
+
+
+/**
  * Comment data structure
  * @type {Comment[]}
  */
