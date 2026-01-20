@@ -1,5 +1,5 @@
-import { comments } from "./comments.js";
-import { getPost } from "./post_json_service.js";
+import "./types.js"
+import { getPost, getCommentsForPost } from "./post_json_service.js";
 
 blogPage();
 
@@ -24,7 +24,7 @@ function blogPage() {
 
 /**
  * Renders the full blog post on its separate page.
- * @param {BlogPost} post 
+ * @param {Post} post 
 */
 function renderFullPost(post) {
     const postElement = document.createElement("article");
@@ -54,9 +54,21 @@ function renderFullPost(post) {
     }
     postContainer.appendChild(postElement);
 
+    getCommentsForPost(post.id).then(comments => {
+        renderComments(post, comments, postElement);
+    }).catch(error => {
+        console.error("Error fetching comments:", error);
+    });
+}
+
+/** Renders comments for a specific post.
+ * @param {Post} post 
+ * @param {Comment[]} comments 
+ * @param {HTMLElement} postElement
+*/
+function renderComments(post, comments, postElement) {
     const commentList = postElement.querySelector(".comment-list");
-    const postComments = comments.filter(c => c.postId === Number(post.id));
-    postComments.forEach(comment => {
+    comments.forEach(comment => {
         const li = document.createElement("li");
         li.className = "comment";
         li.innerHTML = `
@@ -66,7 +78,7 @@ function renderFullPost(post) {
         commentList.appendChild(li);
     });
 
-    if (postComments.length === 0) {
+    if (comments.length === 0) {
         commentList.innerHTML = "<li class='no-comments'>No comments yet.</li>";
     }
 }
