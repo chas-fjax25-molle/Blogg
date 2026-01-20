@@ -1,4 +1,4 @@
-import "./types.js"
+import "./types.js";
 import { getPosts, getCommentsForPost } from "./post_json_service.js";
 
 renderPostPreviews();
