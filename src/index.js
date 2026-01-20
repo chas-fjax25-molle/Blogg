@@ -1,5 +1,5 @@
 import "./types.js";
-import { getPosts, getCommentsForPost } from "./post_json_service.js";
+import { getPosts, getCommentsForPost } from "./api_service.js";
 
 renderPostPreviews();
 
