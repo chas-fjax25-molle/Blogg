@@ -1,0 +1,35 @@
+import { blogPosts } from "./posts.js";
+
+renderPostPreviews();
+
+/**
+ * Renders previews of all blog posts on the main page.
+*/
+function renderPostPreviews() {
+    if (!document.querySelector(".blog-posts")) {
+        console.error("Blog posts container not found.");
+        return;
+    }
+
+    blogPosts.forEach(post => {
+        renderPostPreview(post);
+    });
+}
+
+/**
+ * Renders a preview of a single blog post.
+ * @param {BlogPost} post 
+*/
+function renderPostPreview(post) {
+    const postContainer = document.querySelector(".blog-posts");
+    const postElement = document.createElement("article");
+    postElement.className = "post-preview";
+    postElement.id = `post-${post.id}`;
+    postElement.innerHTML = `
+        <h3 class="post-title">${post.title}</h3>
+        <p class="post-excerpt">${post.excerpt}</p>
+        <img class="post-image-preview" src="${post.image}" alt="Blog Post Image" width="100" height="100"/>
+        <button class="read-more-button" onclick="window.location.href='post.html?id=${post.id}'" aria-label="Read More">Read More</button>
+    `;
+    postContainer.appendChild(postElement);
+}
