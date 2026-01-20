@@ -1,36 +1,43 @@
-body {
-    display: grid;
-    grid-template-rows: auto auto auto;
+*{
+    font-family: 'Quicksand', sans-serif;
 }
 
-header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    padding: 1rem;
+body{
+    line-height: 1.4;
+    color: #3c393d;
+
 }
 
-.nav-menu {
-    justify-self: end;
+header h1{
+    color: white
 }
 
-.blog-posts {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 1rem;
+header{
+    background-color: #3c393d;
 }
 
-@media (min-width: 600px) and (max-width: 1000px) {
-    .blog-posts {
-        grid-template-columns: 1fr 1fr;
-    }
+.nav-menu a{
+    text-transform: uppercase;
+    font-family: '', sans-serif;
+    color: white;
+    letter-spacing: 1px;
+    font-weight: 500;
+    display: inline-block;
+    text-decoration: none;
 }
 
-@media (min-width: 1001px) {
-    .blog-posts {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
+.nav-menu a:hover{
+    opacity: 0.7;
+}
+
+main{
+    text-align: center;
+    padding: 1rem 0;
+}
+
+main h2{
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
 }
 
 .post-preview {
@@ -42,6 +49,7 @@ header {
         "button button";
     gap: 1rem;
     align-items: start;
+    border-radius: 15px;
     border: 1px solid #000000;
     padding: 1rem;
 }
@@ -52,11 +60,6 @@ header {
     margin: 0;
 }
 
-.post-image-preview {
-    grid-area: image;
-    max-width: 100%;
-    height: auto;
-}
 
 .post-excerpt {
     grid-area: excerpt;
@@ -85,39 +88,9 @@ header {
     grid-column: 1 / -1;
 }
 
-.post-body {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    grid-template-areas: "image meta"
-        "image content";
-    gap: 0.25rem;
-}
-
-.post-image {
-    grid-area: image;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-.post-meta {
-    grid-area: meta;
-    font-size: 0.9rem;
-    margin-left: 1rem;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    align-items: center;
-}
-
 .post-content {
     grid-area: content;
     font-size: 1rem;
     margin-left: 1rem;
 }
 
-@media (max-width: 700px) {
-    .post-body {
-        grid-template-columns: 1fr;
-        grid-template-areas: "image" "meta" "content";
-    }
-}
