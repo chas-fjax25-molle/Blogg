@@ -14,7 +14,7 @@
  * Blog post data structure
  * @type {BlogPost[]}
  */
-const blogPosts = [
+export const blogPosts = [
     {
         id: 1,
         title: "Understanding JavaScript Closures",
@@ -96,100 +96,3 @@ const blogPosts = [
         image: "placeholder.jpg"
     }
 ];
-
-// Determine which page to render based on the current URL
-const currentPage = window.location.pathname;
-if (currentPage === "/index.html" || currentPage === "/") {
-    mainPage();
-} else if (currentPage === "/post.html") {
-    blogPage();
-} else {
-    // Do nothing
-}
-
-/**
- * Handles the main page rendering
-*/
-function mainPage() {
-    renderPostPreviews();
-}
-
-/**
- * Renders previews of all blog posts on the main page.
-*/
-function renderPostPreviews() {
-    if (!document.querySelector(".blog-posts")) {
-        console.error("Blog posts container not found.");
-        return;
-    }
-
-    blogPosts.forEach(post => {
-        renderPostPreview(post);
-    });
-}
-
-/**
- * Renders a preview of a single blog post.
- * @param {BlogPost} post 
-*/
-function renderPostPreview(post) {
-    const postContainer = document.querySelector(".blog-posts");
-    const postElement = document.createElement("article");
-    postElement.className = "post-preview";
-    postElement.id = `post-${post.id}`;
-    postElement.innerHTML = `
-        <h3 class="post-title">${post.title}</h3>
-        <p class="post-excerpt">${post.excerpt}</p>
-        <img class="post-image-preview" src="img/${post.image}" alt="Blog Post Image" width="100" height="100"/>
-        <button class="read-more-button" onclick="window.location.href='post.html?id=${post.id}'" aria-label="Read More">Read More</button>
-    `;
-    postContainer.appendChild(postElement);
-}
-
-/**
- * Handles the blog post page rendering
-*/
-function blogPage() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.has("id")) {
-        const postId = parseInt(params.get("id"));
-        const post = blogPosts.find(p => p.id === postId);
-        if (post) {
-            renderFullPost(post);
-        } else {
-            const postContainer = document.querySelector(".blog-post-container");
-            postContainer.innerHTML = "<p alt='Blog post not found.', class='missing-post'>Blog post not found.</p>";
-        }
-    } else {
-        // TODO
-        console.error("No ID parameter found in the URL.");
-    }
-}
-
-/**
- * Renders the full blog post on its separate page.
- * @param {BlogPost} post 
-*/
-function renderFullPost(post) {
-    const postElement = document.createElement("article");
-    postElement.className = "full-post";
-    postElement.id = `post-${post.id}`;
-    postElement.innerHTML = `
-        <h2 class="post-title">${post.title}</h2>
-        <div class="post-body">
-            <img class="post-image" src="img/${post.image}" alt="Blog Post Image" width="300" height="200"/>
-            <div class="post-meta">
-                <p class="post-author">By ${post.author}</p>
-                <time class="post-date" datetime="${post.date}">Published on ${post.date}</time>
-                <p class="post-category">Category: ${post.category}</p>
-            </div>
-            <p class="post-content">${post.content}</p>
-        </div>
-    `;
-    const postContainer = document.querySelector(".blog-post-container");
-    if (!postContainer) {
-        console.error("Blog post container not found.");
-        return;
-    }
-    postContainer.appendChild(postElement);
-}
