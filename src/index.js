@@ -1,4 +1,5 @@
 import { blogPosts } from "./posts.js";
+import { getPosts, createPostElement } from "./post_json_service.js";
 
 renderPostPreviews();
 
