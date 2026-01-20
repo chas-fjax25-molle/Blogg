@@ -9,7 +9,6 @@ export default defineConfig({
             manifest: {
                 name: "Blog",
                 short_name: "Blog",
-                start_url: "/",
                 base: "/Blogg/",
                 display: "standalone",
                 theme_color: "#ffffff",
@@ -17,8 +16,17 @@ export default defineConfig({
                 icons: [
                     { src: "pwa-192x192.png", sizes: "192x192", type: "image/png" },
                     { src: "pwa-512x512.png", sizes: "512x512", type: "image/png" }
-                ]
+                ],
             }
         })
-    ]
+    ],
+    build: {
+        rollupOptions: {
+            input: {
+                main: "index.html",
+                post: "post.html",
+                about: "about.html"
+            }
+        }
+    }
 });
