@@ -11,9 +11,10 @@ function renderPostPreviews() {
         console.error("Blog posts container not found.");
         return;
     }
-
-    blogPosts.forEach(post => {
-        renderPostPreview(post);
+    getPosts().then(posts => {
+        posts.forEach(post => {
+            renderPostPreview(post);
+        });
     });
 }
 
