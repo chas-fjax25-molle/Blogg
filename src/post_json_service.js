@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3001/post_json_service";
+const API_URL = "http://localhost:3000/posts";
 
 export async function getPosts() {
     try {

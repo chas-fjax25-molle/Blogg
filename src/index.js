@@ -14,6 +14,21 @@ function renderPostPreviews() {
         console.error("Blog posts container not found.");
         return;
     }
+    getPosts().then(posts => {
+        posts.forEach(post => {
+            renderPostPreview(post, postContainer);
+        });
+    });
+}
+
+/**
+ * Renders comment count of all blog comments on the main page.
+*/
+function renderCommentCount() {
+    if (!document.querySelector(".blog-posts")) {
+        console.error("Blog posts container not found.");
+        return;
+    }
 
     blogPosts.forEach(post => {
         renderPostPreview(post, postContainer);
