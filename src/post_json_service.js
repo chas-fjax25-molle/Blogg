@@ -1,4 +1,4 @@
-import "./types.js"
+import "./types.js";
 
 const POST_API_URL = "http://localhost:3000/posts";
 const COMMENTS_API_URL = "http://localhost:3000/comments";
