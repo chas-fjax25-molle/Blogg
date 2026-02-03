@@ -1,6 +1,7 @@
 body {
     display: grid;
     grid-template-rows: auto auto auto;
+    margin: 0;
 }
 
 header {
@@ -8,21 +9,19 @@ header {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     padding: 1rem;
-    
+
 }
 
 .logo {
-        justify-self: start;
-        grid-row: 1;
-        
+    justify-self: start;
+    grid-row: 1;
+    border-radius: 10px;
 }
 
 .site-title {
     justify-self: center;
     margin: -1px;
     grid-row: 2;
-    
-
 }
 
 .nav-menu {
@@ -64,6 +63,7 @@ header {
     grid-area: image;
     max-width: 100%;
     height: auto;
+    border-radius: 10px;
 }
 
 .post-body {
@@ -72,6 +72,8 @@ header {
     grid-template-areas: "image meta"
         "image content";
     gap: 0.25rem;
+    padding: 1rem;
+    margin: 2rem 0;
 }
 
 .post-image {
@@ -79,6 +81,7 @@ header {
     width: 100%;
     height: auto;
     object-fit: cover;
+    border-radius: 30px;
 }
 
 .post-meta {
@@ -96,3 +99,67 @@ header {
         grid-template-areas: "image" "meta" "content";
     }
 }
+
+/* New styles for admin.html */
+.blog-new-post {
+    gap: 1rem;
+    border-radius: 1rem;
+    background-color: #d7d7d7;
+    text-align: left;
+    padding: 5rem;
+    margin: 5rem;
+}
+
+.new-post-form {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem;
+}
+
+.blog-new-post input, textarea, select {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: 0.3rem;
+}
+
+
+@media (max-width: 800px) {
+    .blog-new-post {
+        margin: 1rem;
+        padding: 1rem;
+        width: auto;
+    }
+
+    .form-group {
+        flex-direction: column;
+    }
+}
+
+.about-us {
+    text-align: left;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #f0f0f0;
+    margin-top: 2rem;
+}
+
+
+

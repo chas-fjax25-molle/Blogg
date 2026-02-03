@@ -94,34 +94,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const authBtn = document.getElementById("authBtn");
-const modal = document.getElementById("loginModal");
-const closeBtn = document.querySelector(".close-btn");
-const loginBtn = document.getElementById("loginBtn");
+// Simple login logic for admin.html
+document.addEventListener('DOMContentLoaded', () => {
+    const isAdminPage = window.location.pathname.endsWith('admin.html');
+    const loginModal = document.getElementById('loginModal');
+    const adminSection = document.getElementById('adminSection');
+    const authBtn = document.getElementById('authBtn');
+    const closeBtn = document.querySelector('.close-btn');
+    const loginBtn = document.getElementById('loginBtn');
 
-let loggedIn = false;
-
-authBtn.addEventListener("click", () => {
-    if (loggedIn) {
-      loggedIn = false;
-      authBtn.textContent = "Login";
-    } else {
-      modal.style.display = "flex";
+    function isLoggedIn() {
+        return localStorage.getItem('isAdminLoggedIn') === 'true';
     }
-});
 
-closeBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-});
+    function showAdmin() {
+        if (adminSection) adminSection.style.display = '';
+        if (loginModal) loginModal.style.display = 'none';
+        if (loginModal) loginModal.setAttribute('aria-hidden', 'true');
+        if (authBtn) authBtn.textContent = 'LOGOUT';
+    }
 
-loginBtn.addEventListener("click", () => {
-    loggedIn = true;
-    authBtn.textContent = "Logout";
-    modal.style.display = "none";
-});
+    function showLogin() {
+        if (adminSection) adminSection.style.display = 'none';
+        if (loginModal) loginModal.style.display = 'block';
+        if (loginModal) loginModal.setAttribute('aria-hidden', 'false');
+        if (authBtn) authBtn.textContent = 'LOGIN';
+    }
 
-window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
+    if (isAdminPage) {
+        if (isLoggedIn()) {
+            showAdmin();
+        } else {
+            showLogin();
+        }
+
+        if (authBtn) {
+            authBtn.onclick = () => {
+                if (isLoggedIn()) {
+                    localStorage.removeItem('isAdminLoggedIn');
+                    window.location.reload();
+                } else {
+                    showLogin();
+                }
+            };
+        }
+
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                loginModal.style.display = 'none';
+                loginModal.setAttribute('aria-hidden', 'true');
+            };
+        }
+
+        if (loginBtn) {
+            loginBtn.onclick = (e) => {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                // Simple check, replace with real authentication
+                if (username === 'admin' && password === 'password') {
+                    localStorage.setItem('isAdminLoggedIn', 'true');
+                    showAdmin();
+                } else {
+                    alert('Invalid credentials');
+                }
+            };
+        }
     }
 });
