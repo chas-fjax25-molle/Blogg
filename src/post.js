@@ -96,7 +96,7 @@ function renderFullPost(post) {
             };
 
             try {
-                const response = await fetch('https://example.com/api/comments', {
+                const response = await fetch('http://localhost:3000/comments', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -116,7 +116,7 @@ function renderFullPost(post) {
                     if (noComments) {
                         noComments.remove();
                     }
-                    commentList.appendChild(li);
+                    commentList.prepend(li);
                     commentForm.reset();
                     commentForm.classList.add("hidden");
                     newCommentBtn.classList.remove("hidden");
