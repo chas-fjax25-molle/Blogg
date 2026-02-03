@@ -1,12 +1,6 @@
 import { comments } from "./comments.js";
 import { getPost, login } from "./post_json_service.js";
 
-try {
-    const token = await login("admin", "password123");
-    console.log("Logged in successfully. Token:", token);
-} catch (error) {
-    console.error("Login failed:", error);
-}
 blogPage();
 
 /**
