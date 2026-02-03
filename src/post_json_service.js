@@ -76,6 +76,8 @@ export async function createPost(postData) {
     try {
         const response = await fetch(POST_API_URL, {
             method: "POST",
+            // Send cookies for authentication
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -127,6 +129,8 @@ export async function addCommentToPost(commentData) {
     try {
         const response = await fetch(`${COMMENTS_API_URL}`, {
             method: "POST",
+            // Send cookies for authentication
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -145,5 +149,53 @@ export async function addCommentToPost(commentData) {
             error,
         );
         throw error;
+    }
+}
+
+/**
+ * Login function to authenticate a user.
+ * Sets an HTTP-only cookie for automatic authentication on subsequent requests.
+ *
+ * @param {string} username
+ * @param {string} password
+ *
+ * @returns {Promise<{id: number, username: string}>} User information.
+ */
+export async function login(username, password) {
+    try {
+        const response = await fetch(`http://localhost:3000/login`, {
+            method: "POST",
+            credentials: "include", // Receive and store cookies
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+        });
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.user; // Return user info, cookie is set automatically
+    } catch (error) {
+        console.error("Failed to login:", error);
+        throw error;
+    }
+}
+
+/**
+ * Check if user is authenticated.
+ *
+ * @returns {Promise<{authenticated: boolean, user?: {id: number, username: string}}>} Authentication status.
+ */
+export async function checkAuth() {
+    try {
+        const response = await fetch(`http://localhost:3000/me`, {
+            credentials: "include",
+        });
+        const data = await response.json();
+        return data; // { authenticated: true/false, user?: {...} }
+    } catch (error) {
+        return { authenticated: false };
     }
 }

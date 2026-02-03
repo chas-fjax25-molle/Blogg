@@ -31,7 +31,7 @@ function renderPostPreviews() {
  */
 function renderPostPreview(post, postContainer) {
     const postComments = comments.filter(
-        comment => comment.postId === Number(post.id)
+        (comment) => comment.postId === Number(post.id),
     );
     const commentCount = postComments.length;
     const postElement = document.createElement("article");
