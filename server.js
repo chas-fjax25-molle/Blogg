@@ -38,8 +38,18 @@ const app = new App();
 
 // CORS - must allow specific origin and credentials for cookie-based auth
 app.use((req, res, next) => {
-    const origin = req.headers.origin || req.headers.host;
-    res.setHeader("Access-Control-Allow-Origin", origin);
+    const origin = req.headers.origin;
+
+    // Allow requests from any localhost/127.0.0.1 origin for development
+    if (
+        origin &&
+        (origin.includes("localhost") || origin.includes("127.0.0.1"))
+    ) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    } else if (origin) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
         "Access-Control-Allow-Methods",
