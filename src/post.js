@@ -1,6 +1,12 @@
 import { comments } from "./comments.js";
 import { getPost, login } from "./post_json_service.js";
 
+try {
+    const token = await login("admin", "password123");
+    console.log("Logged in successfully. Token:", token);
+} catch (error) {
+    console.error("Login failed:", error);
+}
 blogPage();
 
 /**
@@ -72,68 +78,70 @@ function renderFullPost(post) {
     postContainer.appendChild(postElement);
 
     const commentList = postElement.querySelector(".comment-list");
-           const newCommentBtn = postElement.querySelector("#new-comment-btn");
-        const commentForm = postElement.querySelector("#comment-form");
-        const cancelBtn = postElement.querySelector(".cancel-btn");
+    const newCommentBtn = postElement.querySelector("#new-comment-btn");
+    const commentForm = postElement.querySelector("#comment-form");
+    const cancelBtn = postElement.querySelector(".cancel-btn");
 
-        newCommentBtn.addEventListener("click", () => {
-            commentForm.classList.remove("hidden");
-            newCommentBtn.classList.add("hidden");
-        });
+    newCommentBtn.addEventListener("click", () => {
+        commentForm.classList.remove("hidden");
+        newCommentBtn.classList.add("hidden");
+    });
 
-        cancelBtn.addEventListener("click", () => {
-            commentForm.classList.add("hidden");
-            newCommentBtn.classList.remove("hidden");
-            commentForm.reset();
-        });
+    cancelBtn.addEventListener("click", () => {
+        commentForm.classList.add("hidden");
+        newCommentBtn.classList.remove("hidden");
+        commentForm.reset();
+    });
 
-        commentForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const author = document.getElementById("author-input").value;
-            const text = document.getElementById("comment-input").value;
-            const date = new Date().toISOString().split('T')[0];
+    commentForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const author = document.getElementById("author-input").value;
+        const text = document.getElementById("comment-input").value;
+        const date = new Date().toISOString().split("T")[0];
 
-            const newComment = {
-                postId: Number(post.id),
-                author: author,
-                text: text,
-                date: date
-            };
+        const newComment = {
+            postId: Number(post.id),
+            author: author,
+            text: text,
+            date: date,
+        };
 
-            try {
-                const response = await fetch('http://localhost:3000/comments', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(newComment)
-                });
+        try {
+            const response = await fetch("http://localhost:3000/comments", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newComment),
+            });
 
-                if (response.ok) {
-                    const savedComment = await response.json();
-                    const li = document.createElement("li");
-                    li.className = "comment";
-                    li.innerHTML = `
+            if (response.ok) {
+                const savedComment = await response.json();
+                const li = document.createElement("li");
+                li.className = "comment";
+                li.innerHTML = `
                         <p class="comment-author">${savedComment.author}</p>
                         <p class="comment-text">${savedComment.text}</p>
                     `;
-                    const noComments = commentList.querySelector(".no-comments");
-                    if (noComments) {
-                        noComments.remove();
-                    }
-                    commentList.prepend(li);
-                    commentForm.reset();
-                    commentForm.classList.add("hidden");
-                    newCommentBtn.classList.remove("hidden");
+                const noComments = commentList.querySelector(".no-comments");
+                if (noComments) {
+                    noComments.remove();
                 }
+                commentList.prepend(li);
+                commentForm.reset();
+                commentForm.classList.add("hidden");
+                newCommentBtn.classList.remove("hidden");
             }
-            catch (error) {
-                console.error("Error submitting comment:", error);
-                alert("There was an error submitting your comment. Please try again later.");
-            }
-        });
-    const postComments = comments.filter(c => c.postId === Number(post.id));
-    postComments.forEach(comment => {
+        } catch (error) {
+            console.error("Error submitting comment:", error);
+            alert(
+                "There was an error submitting your comment. Please try again later.",
+            );
+        }
+    });
+    const postComments = comments.filter((c) => c.postId === Number(post.id));
+    postComments.forEach((comment) => {
         const li = document.createElement("li");
         li.className = "comment";
         li.innerHTML = `
