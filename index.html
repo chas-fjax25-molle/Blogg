@@ -23,9 +23,29 @@
             <ul>
                 <li><a href="index.html" aria-label="To home page"> HOME </a></li>
                 <li><a href="about.html" aria-label="To about page"> ABOUT </a></li>
+                <li><button id="authBtn" class="auth-btn">Login</button></li>
             </ul>
         </nav>
     </header>
+    <div id="loginModal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="close-btn" aria-label="Close">&times;</button>
+
+            <h2>Login</h2>
+
+            <label>
+            Username
+            <input type="text" id="username">
+            </label>
+
+            <label>
+            Password
+            <input type="password" id="password">
+            </label>
+
+            <button id="loginBtn">Login</button>
+        </div>
+    </div>
     <main role="main">
         <h2>Recent Posts</h2>
         <section class="blog-posts">

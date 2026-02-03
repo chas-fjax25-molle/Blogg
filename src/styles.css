@@ -117,3 +117,55 @@ main h2{
     gap: 0.3rem;
 }
 
+/** LOGIN STYLING */
+.auth-btn {
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+/* Modal backdrop */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 1.5rem;
+    width: 300px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 0.4rem;
+}
+
+.modal-content button {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 1rem;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+

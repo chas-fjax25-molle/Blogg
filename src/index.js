@@ -93,3 +93,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+const authBtn = document.getElementById("authBtn");
+const modal = document.getElementById("loginModal");
+const closeBtn = document.querySelector(".close-btn");
+const loginBtn = document.getElementById("loginBtn");
+
+let loggedIn = false;
+
+authBtn.addEventListener("click", () => {
+    if (loggedIn) {
+      loggedIn = false;
+      authBtn.textContent = "Login";
+    } else {
+      modal.style.display = "flex";
+    }
+});
+
+closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+});
+
+loginBtn.addEventListener("click", () => {
+    loggedIn = true;
+    authBtn.textContent = "Logout";
+    modal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+});
