@@ -36,14 +36,26 @@ const service = new Service(db);
 // Create app manually to control middleware order
 const app = new App();
 
-// CORS
+// CORS - must allow specific origin and credentials for cookie-based auth
 app.use((req, res, next) => {
-    return cors({
-        allowedHeaders: req.headers["access-control-request-headers"]
-            ?.split(",")
-            .map((h) => h.trim()),
-    })(req, res, next);
-}).options("*", cors());
+    const origin = req.headers.origin || req.headers.host;
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+    );
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization",
+    );
+
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(204);
+    }
+
+    next();
+});
 
 // Body parser
 app.use(json());
@@ -73,7 +85,6 @@ app.post("/login", (req, res) => {
         ]);
 
         res.json({
-            token,
             user: {
                 id: user.id,
                 username: user.username,

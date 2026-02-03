@@ -154,16 +154,18 @@ export async function addCommentToPost(commentData) {
 
 /**
  * Login function to authenticate a user.
+ * Sets an HTTP-only cookie for automatic authentication on subsequent requests.
  *
  * @param {string} username
  * @param {string} password
  *
- * @returns {Promise<string>} Authentication token.
+ * @returns {Promise<{id: number, username: string}>} User information.
  */
 export async function login(username, password) {
     try {
         const response = await fetch(`http://localhost:3000/login`, {
             method: "POST",
+            credentials: "include", // Receive and store cookies
             headers: {
                 "Content-Type": "application/json",
             },
@@ -174,7 +176,7 @@ export async function login(username, password) {
         }
 
         const data = await response.json();
-        return data.token;
+        return data.user; // Return user info, cookie is set automatically
     } catch (error) {
         console.error("Failed to login:", error);
         throw error;
