@@ -96,7 +96,7 @@ function renderFullPost(post) {
             };
 
             try {
-                const response = await fetch( 'http://localhost:3000/comments', {
+                const response = await fetch('https://example.com/api/comments', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -135,7 +135,7 @@ function renderFullPost(post) {
             <p class="comment-author">${comment.author}</p>
             <p class="comment-text">${comment.text}</p>
         `;
-        commentList.appendChild(li);
+        commentList.prepend(li);
     });
 
     if (postComments.length === 0) {
