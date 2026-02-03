@@ -44,8 +44,20 @@ function renderFullPost(post) {
 
         <section class="comments" aria-labelledby="comments-heading">
             <h3 id="comments-heading">Comments</h3>
+            <div class="comment-form-container">
+        <button id="new-comment-btn" class="new-comment-btn">Add Comment</button>
+        <form id="comment-form" class="comment-form hidden">
+            <input type="text" id="author-input" placeholder="Your Name" required>
+            <textarea id="comment-input" placeholder="Write your comment: " required></textarea>
+            <div class="form-buttons">
+                <button type="submit" class="publish-btn">Publish</button>
+                <button type="button" class="cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
             <ul class="comment-list"></ul>
         </section>
+        
     `;
     const postContainer = document.querySelector(".blog-post-container");
     if (!postContainer) {
@@ -55,6 +67,66 @@ function renderFullPost(post) {
     postContainer.appendChild(postElement);
 
     const commentList = postElement.querySelector(".comment-list");
+           const newCommentBtn = postElement.querySelector("#new-comment-btn");
+        const commentForm = postElement.querySelector("#comment-form");
+        const cancelBtn = postElement.querySelector(".cancel-btn");
+
+        newCommentBtn.addEventListener("click", () => {
+            commentForm.classList.remove("hidden");
+            newCommentBtn.classList.add("hidden");
+        });
+
+        cancelBtn.addEventListener("click", () => {
+            commentForm.classList.add("hidden");
+            newCommentBtn.classList.remove("hidden");
+            commentForm.reset();
+        });
+
+        commentForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const author = document.getElementById("author-input").value;
+            const text = document.getElementById("comment-input").value;
+            const date = new Date().toISOString().split('T')[0];
+
+            const newComment = {
+                postId: Number(post.id),
+                author: author,
+                text: text,
+                date: date
+            };
+
+            try {
+                const response = await fetch( 'http://localhost:3000/comments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newComment)
+                });
+
+                if (response.ok) {
+                    const savedComment = await response.json();
+                    const li = document.createElement("li");
+                    li.className = "comment";
+                    li.innerHTML = `
+                        <p class="comment-author">${savedComment.author}</p>
+                        <p class="comment-text">${savedComment.text}</p>
+                    `;
+                    const noComments = commentList.querySelector(".no-comments");
+                    if (noComments) {
+                        noComments.remove();
+                    }
+                    commentList.appendChild(li);
+                    commentForm.reset();
+                    commentForm.classList.add("hidden");
+                    newCommentBtn.classList.remove("hidden");
+                }
+            }
+            catch (error) {
+                console.error("Error submitting comment:", error);
+                alert("There was an error submitting your comment. Please try again later.");
+            }
+        });
     const postComments = comments.filter(c => c.postId === Number(post.id));
     postComments.forEach(comment => {
         const li = document.createElement("li");
