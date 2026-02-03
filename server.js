@@ -116,8 +116,9 @@ app.get("/me", (req, res) => {
 
 // Custom authentication middleware - runs BEFORE json-server routes
 app.use((req, res, next) => {
-    // Allow GET requests without auth
+    // Allow GET requests and /comments endpoint without auth
     if (req.method === "GET") {
+        //if (req.method === "GET" || req.url.startsWith("/comments")) {
         return next();
     }
 
@@ -128,7 +129,11 @@ app.use((req, res, next) => {
         return acc;
     }, {});
 
+    console.log("Cookies:", cookies);
+
     const token = cookies?.authToken;
+
+    console.log("Auth token from cookie:", token);
 
     if (!token || !validateToken(token)) {
         return res.status(401).json({
