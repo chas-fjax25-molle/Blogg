@@ -19,7 +19,7 @@ const COMMENTS_API_URL = "http://localhost:3000/comments";
  * @property {number} postId - Identifier for the post connected to the comment
  * @property {string} author - The author of the comment
  * @property {string} text - The text content of the comment
- * @property {string} date - The date of when the comment was created 
+ * @property {string} date - The date of when the comment was created
  */
 
 /**
@@ -36,7 +36,6 @@ export async function getPosts() {
 
         const posts = await response.json();
         return posts;
-
     } catch (error) {
         console.error("Failed to fetch posts:", error);
 
@@ -50,7 +49,7 @@ export async function getPosts() {
 /**
  * Gets a single post by ID.
  * @param {number} id
- * @returns {Promise<Post>} The post object. 
+ * @returns {Promise<Post>} The post object.
  */
 export async function getPost(id) {
     try {
@@ -62,7 +61,6 @@ export async function getPost(id) {
 
         const post = await response.json();
         return post;
-
     } catch (error) {
         console.error(`Failed to fetch post with id ${id}:`, error);
         throw error;
@@ -79,9 +77,9 @@ export async function createPost(postData) {
         const response = await fetch(POST_API_URL, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(postData)
+            body: JSON.stringify(postData),
         });
 
         if (!response.ok) {
@@ -90,7 +88,6 @@ export async function createPost(postData) {
 
         const newPost = await response.json();
         return newPost;
-
     } catch (error) {
         console.error("Failed to create post:", error);
         throw error;
@@ -112,9 +109,11 @@ export async function getCommentsForPost(postId) {
 
         const comments = await response.json();
         return comments;
-
     } catch (error) {
-        console.error(`Failed to fetch comments for post with id ${postId}:`, error);
+        console.error(
+            `Failed to fetch comments for post with id ${postId}:`,
+            error,
+        );
         throw error;
     }
 }
@@ -129,9 +128,9 @@ export async function addCommentToPost(commentData) {
         const response = await fetch(`${COMMENTS_API_URL}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(commentData)
+            body: JSON.stringify(commentData),
         });
 
         if (!response.ok) {
@@ -140,9 +139,11 @@ export async function addCommentToPost(commentData) {
 
         const newComment = await response.json();
         return newComment;
-
     } catch (error) {
-        console.error(`Failed to add comment to post with id ${commentData.postId}:`, error);
+        console.error(
+            `Failed to add comment to post with id ${commentData.postId}:`,
+            error,
+        );
         throw error;
     }
 }
