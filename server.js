@@ -67,6 +67,11 @@ app.post("/login", (req, res) => {
             username: user.username,
         });
 
+        // Set HTTP-only cookie so that browser sends it automatically
+        res.setHeader("Set-Cookie", [
+            `authToken=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict`,
+        ]);
+
         res.json({
             token,
             user: {
@@ -86,9 +91,14 @@ app.use((req, res, next) => {
         return next();
     }
 
-    // Check authorization for POST, PUT, PATCH, DELETE
-    const authHeader = req.headers.authorization;
-    const token = authHeader?.replace("Bearer ", "");
+    // Parse cookies
+    const cookies = req.headers.cookie?.split(";").reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split("=");
+        acc[key] = value;
+        return acc;
+    }, {});
+
+    const token = cookies?.authToken;
 
     if (!token || !validateToken(token)) {
         return res.status(401).json({

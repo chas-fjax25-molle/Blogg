@@ -76,6 +76,8 @@ export async function createPost(postData) {
     try {
         const response = await fetch(POST_API_URL, {
             method: "POST",
+            // Send cookies for authentication
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -127,6 +129,8 @@ export async function addCommentToPost(commentData) {
     try {
         const response = await fetch(`${COMMENTS_API_URL}`, {
             method: "POST",
+            // Send cookies for authentication
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -144,6 +148,35 @@ export async function addCommentToPost(commentData) {
             `Failed to add comment to post with id ${commentData.postId}:`,
             error,
         );
+        throw error;
+    }
+}
+
+/**
+ * Login function to authenticate a user.
+ *
+ * @param {string} username
+ * @param {string} password
+ *
+ * @returns {Promise<string>} Authentication token.
+ */
+export async function login(username, password) {
+    try {
+        const response = await fetch(`http://localhost:3000/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+        });
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.token;
+    } catch (error) {
+        console.error("Failed to login:", error);
         throw error;
     }
 }

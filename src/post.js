@@ -1,22 +1,27 @@
 import { comments } from "./comments.js";
-import { getPost } from "./post_json_service.js";
+import { getPost, login } from "./post_json_service.js";
 
 blogPage();
 
 /**
  * Handles the blog post page rendering
-*/
+ */
 function blogPage() {
     const params = new URLSearchParams(window.location.search);
     if (params.has("id")) {
         const postId = parseInt(params.get("id"));
-        getPost(postId).then(post => {
-            renderFullPost(post);
-        }).catch(error => {
-            console.error("Error fetching post:", error);
-            const postContainer = document.querySelector(".blog-post-container");
-            postContainer.innerHTML = "<p alt='Blog post not found.', class='missing-post'>Blog post not found.</p>";
-        });
+        getPost(postId)
+            .then((post) => {
+                renderFullPost(post);
+            })
+            .catch((error) => {
+                console.error("Error fetching post:", error);
+                const postContainer = document.querySelector(
+                    ".blog-post-container",
+                );
+                postContainer.innerHTML =
+                    "<p alt='Blog post not found.', class='missing-post'>Blog post not found.</p>";
+            });
     } else {
         window.location.href = "index.html";
     }
@@ -24,8 +29,8 @@ function blogPage() {
 
 /**
  * Renders the full blog post on its separate page.
- * @param {BlogPost} post 
-*/
+ * @param {BlogPost} post
+ */
 function renderFullPost(post) {
     const postElement = document.createElement("article");
     postElement.className = "full-post";
@@ -55,8 +60,8 @@ function renderFullPost(post) {
     postContainer.appendChild(postElement);
 
     const commentList = postElement.querySelector(".comment-list");
-    const postComments = comments.filter(c => c.postId === Number(post.id));
-    postComments.forEach(comment => {
+    const postComments = comments.filter((c) => c.postId === Number(post.id));
+    postComments.forEach((comment) => {
         const li = document.createElement("li");
         li.className = "comment";
         li.innerHTML = `

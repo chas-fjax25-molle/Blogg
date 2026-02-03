@@ -1,11 +1,17 @@
 import { comments } from "./comments.js";
-import { getPosts } from "./post_json_service.js";
+import { getPosts, login } from "./post_json_service.js";
 
+try {
+    const token = await login("admin", "password123");
+    console.log("Logged in successfully. Token:", token);
+} catch (error) {
+    console.error("Login failed:", error);
+}
 renderPostPreviews();
 
 /**
  * Renders previews of all blog posts on the main page.
-*/
+ */
 function renderPostPreviews() {
     const postContainer = document.querySelector(".blog-posts");
 
@@ -13,8 +19,8 @@ function renderPostPreviews() {
         console.error("Blog posts container not found.");
         return;
     }
-    getPosts().then(posts => {
-        posts.forEach(post => {
+    getPosts().then((posts) => {
+        posts.forEach((post) => {
             renderPostPreview(post, postContainer);
         });
     });
@@ -25,10 +31,10 @@ function renderPostPreviews() {
  * @param {BlogPost} post
  * @param {HTMLElement} postContainer
  * TODO: add commentCount to post data
-*/
+ */
 function renderPostPreview(post, postContainer) {
     const postComments = comments.filter(
-        comment => comment.postId === Number(post.id)
+        (comment) => comment.postId === Number(post.id),
     );
     const commentCount = postComments.length;
     const postElement = document.createElement("article");
