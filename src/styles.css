@@ -178,3 +178,8 @@ main h2{
 .comment-text {
     margin: 0;
 }
+
+.comment-list {
+    list-style: none;
+    padding-left: 0;
+}
