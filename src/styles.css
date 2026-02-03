@@ -94,3 +94,26 @@ main h2{
     margin-left: 1rem;
 }
 
+.blog-new-post {
+    gap: 1rem;
+    border-radius: 1rem;
+    background-color: #d7d7d7;
+    text-align: left;
+    max-width: 600px;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.new-post-form {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem;
+}
+
