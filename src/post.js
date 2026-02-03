@@ -1,6 +1,13 @@
 import { comments } from "./comments.js";
 import { getPost, login } from "./post_json_service.js";
 
+try {
+    const token = await login("admin", "password123");
+    console.log("Logged in successfully. Token:", token);
+} catch (error) {
+    console.error("Login failed:", error);
+}
+
 blogPage();
 
 /**
@@ -74,7 +81,9 @@ function renderFullPost(post) {
     const commentList = postElement.querySelector(".comment-list");
            const newCommentBtn = postElement.querySelector("#new-comment-btn");
         const commentForm = postElement.querySelector("#comment-form");
-        const cancelBtn = postElement.querySelector(".cancel-btn");
+    const cancelBtn = postElement.querySelector(".cancel-btn");
+            const publishBtn = postElement.querySelector(".publish-btn");
+
 
         newCommentBtn.addEventListener("click", () => {
             commentForm.classList.remove("hidden");
@@ -86,8 +95,8 @@ function renderFullPost(post) {
             newCommentBtn.classList.remove("hidden");
             commentForm.reset();
         });
-
-        commentForm.addEventListener("submit", async (e) => {
+    
+        publishBtn.addEventListener("click", async (e) => {
             e.preventDefault();
             const author = document.getElementById("author-input").value;
             const text = document.getElementById("comment-input").value;
