@@ -36,20 +36,9 @@ const service = new Service(db);
 // Create app manually to control middleware order
 const app = new App();
 
-// CORS - must allow specific origin and credentials for cookie-based auth
+// CORS - allow everything for development
 app.use((req, res, next) => {
-    const origin = req.headers.origin;
-
-    // Allow requests from any localhost/127.0.0.1 origin for development
-    if (
-        origin &&
-        (origin.includes("localhost") || origin.includes("127.0.0.1"))
-    ) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-    } else if (origin) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-    }
-
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
         "Access-Control-Allow-Methods",
@@ -57,11 +46,12 @@ app.use((req, res, next) => {
     );
     res.setHeader(
         "Access-Control-Allow-Headers",
-        "Content-Type, Authorization",
+        "Content-Type, Authorization, X-Requested-With, Accept",
     );
 
     if (req.method === "OPTIONS") {
-        return res.sendStatus(204);
+        res.sendStatus(204);
+        return;
     }
 
     next();
