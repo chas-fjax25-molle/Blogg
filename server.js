@@ -1,14 +1,21 @@
 import { readFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
-import { createApp } from "json-server/lib/app.js";
+import { Low } from "lowdb";
+import { JSONFile } from "lowdb/node";
+import { App } from "@tinyhttp/app";
+import { cors } from "@tinyhttp/cors";
+import { json } from "milliparsec";
+import { Service } from "json-server/lib/service.js";
 
-// Read db.json and users.json
-const data = JSON.parse(
-    await readFile(new URL("./db.json", import.meta.url), "utf-8"),
-);
+// Read users.json for authentication
 const usersData = JSON.parse(
     await readFile(new URL("./users.json", import.meta.url), "utf-8"),
 );
+
+// Create lowdb instance with JSONFile adapter (watches db.json)
+const adapter = new JSONFile("db.json");
+const db = new Low(adapter, {});
+await db.read();
 
 // Store active tokens (in-memory for simplicity)
 const activeTokens = new Map(); // token -> user info
@@ -23,32 +30,25 @@ const validateToken = (token) => {
     return activeTokens.has(token);
 };
 
-// Create the json-server app
-const app = createApp({ data });
+// Create service
+const service = new Service(db);
 
-// Custom authentication middleware - insert before other routes
+// Create app manually to control middleware order
+const app = new App();
+
+// CORS
 app.use((req, res, next) => {
-    // Allow GET requests and /login without auth
-    if (req.method === "GET" || req.path === "/login") {
-        return next();
-    }
+    return cors({
+        allowedHeaders: req.headers["access-control-request-headers"]
+            ?.split(",")
+            .map((h) => h.trim()),
+    })(req, res, next);
+}).options("*", cors());
 
-    // Check authorization for POST, PUT, PATCH, DELETE
-    const authHeader = req.headers.authorization;
-    const token = authHeader?.replace("Bearer ", "");
+// Body parser
+app.use(json());
 
-    if (!token || !validateToken(token)) {
-        return res.status(401).json({
-            error: "Unauthorized. Please provide a valid token.",
-        });
-    }
-
-    // Attach user info to request
-    req.user = activeTokens.get(token);
-    next();
-});
-
-// Add custom login route
+// Add custom login route FIRST
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
@@ -76,6 +76,117 @@ app.post("/login", (req, res) => {
         });
     } else {
         res.status(401).json({ error: "Invalid credentials" });
+    }
+});
+
+// Custom authentication middleware - runs BEFORE json-server routes
+app.use((req, res, next) => {
+    // Allow GET requests without auth
+    if (req.method === "GET") {
+        return next();
+    }
+
+    // Check authorization for POST, PUT, PATCH, DELETE
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.replace("Bearer ", "");
+
+    if (!token || !validateToken(token)) {
+        return res.status(401).json({
+            error: "Unauthorized. Please provide a valid token.",
+        });
+    }
+
+    // Attach user info to request
+    req.user = activeTokens.get(token);
+    next();
+});
+
+// Now add json-server routes
+const isItem = (obj) =>
+    typeof obj === "object" && obj !== null && !Array.isArray(obj);
+
+app.get("/:name", (req, res, next) => {
+    const { name = "" } = req.params;
+    const query = {};
+    Object.keys(req.query).forEach((key) => {
+        let value = req.query[key];
+        if (
+            ["_start", "_end", "_limit", "_page", "_per_page"].includes(key) &&
+            typeof value === "string"
+        ) {
+            value = parseInt(value);
+        }
+        if (!Number.isNaN(value)) {
+            query[key] = value;
+        }
+    });
+    res.locals["data"] = service.find(name, query);
+    next?.();
+});
+
+app.get("/:name/:id", (req, res, next) => {
+    const { name = "", id = "" } = req.params;
+    res.locals["data"] = service.findById(name, id, req.query);
+    next?.();
+});
+
+app.post("/:name", async (req, res, next) => {
+    const { name = "" } = req.params;
+    if (isItem(req.body)) {
+        res.locals["data"] = await service.create(name, req.body);
+    }
+    next?.();
+});
+
+app.put("/:name", async (req, res, next) => {
+    const { name = "" } = req.params;
+    if (isItem(req.body)) {
+        res.locals["data"] = await service.update(name, req.body);
+    }
+    next?.();
+});
+
+app.put("/:name/:id", async (req, res, next) => {
+    const { name = "", id = "" } = req.params;
+    if (isItem(req.body)) {
+        res.locals["data"] = await service.updateById(name, id, req.body);
+    }
+    next?.();
+});
+
+app.patch("/:name", async (req, res, next) => {
+    const { name = "" } = req.params;
+    if (isItem(req.body)) {
+        res.locals["data"] = await service.patch(name, req.body);
+    }
+    next?.();
+});
+
+app.patch("/:name/:id", async (req, res, next) => {
+    const { name = "", id = "" } = req.params;
+    if (isItem(req.body)) {
+        res.locals["data"] = await service.patchById(name, id, req.body);
+    }
+    next?.();
+});
+
+app.delete("/:name/:id", async (req, res, next) => {
+    const { name = "", id = "" } = req.params;
+    res.locals["data"] = await service.destroyById(
+        name,
+        id,
+        req.query["_dependent"],
+    );
+    next?.();
+});
+
+app.use("/:name", (req, res) => {
+    const { data } = res.locals;
+    if (data === undefined) {
+        res.sendStatus(404);
+    } else {
+        if (req.method === "POST") res.status(201);
+        res.json(data);
     }
 });
 
