@@ -1,4 +1,5 @@
-import { blogPosts } from "./posts.js";
+import { comments } from "./comments.js";
+import { getPost } from "./post_json_service.js";
 
 blogPage();
 
@@ -9,13 +10,13 @@ function blogPage() {
     const params = new URLSearchParams(window.location.search);
     if (params.has("id")) {
         const postId = parseInt(params.get("id"));
-        const post = blogPosts.find(p => p.id === postId);
-        if (post) {
+        getPost(postId).then(post => {
             renderFullPost(post);
-        } else {
+        }).catch(error => {
+            console.error("Error fetching post:", error);
             const postContainer = document.querySelector(".blog-post-container");
             postContainer.innerHTML = "<p alt='Blog post not found.', class='missing-post'>Blog post not found.</p>";
-        }
+        });
     } else {
         window.location.href = "index.html";
     }
@@ -40,6 +41,11 @@ function renderFullPost(post) {
             </div>
             <p class="post-content">${post.content}</p>
         </div>
+
+        <section class="comments" aria-labelledby="comments-heading">
+            <h3 id="comments-heading">Comments</h3>
+            <ul class="comment-list"></ul>
+        </section>
     `;
     const postContainer = document.querySelector(".blog-post-container");
     if (!postContainer) {
@@ -47,4 +53,20 @@ function renderFullPost(post) {
         return;
     }
     postContainer.appendChild(postElement);
+
+    const commentList = postElement.querySelector(".comment-list");
+    const postComments = comments.filter(c => c.postId === Number(post.id));
+    postComments.forEach(comment => {
+        const li = document.createElement("li");
+        li.className = "comment";
+        li.innerHTML = `
+            <p class="comment-author">${comment.author}</p>
+            <p class="comment-text">${comment.text}</p>
+        `;
+        commentList.appendChild(li);
+    });
+
+    if (postComments.length === 0) {
+        commentList.innerHTML = "<li class='no-comments'>No comments yet.</li>";
+    }
 }
