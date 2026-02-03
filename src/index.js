@@ -1,13 +1,5 @@
 import { comments } from "./comments.js";
-import { getPosts, login } from "./post_json_service.js";
-
-try {
-    const token = await login("admin", "password123");
-    console.log("Logged in successfully. Token:", token);
-} catch (error) {
-    console.error("Login failed:", error);
-}
-renderPostPreviews();
+import { createPost, getPosts } from "./post_json_service.js";
 
 /**
  * Renders previews of all blog posts on the main page.
@@ -15,22 +7,27 @@ renderPostPreviews();
 function renderPostPreviews() {
     const postContainer = document.querySelector(".blog-posts");
 
-    if (!document.querySelector(".blog-posts")) {
+    if (!postContainer) {
         console.error("Blog posts container not found.");
         return;
     }
-    getPosts().then((posts) => {
-        posts.forEach((post) => {
+
+    // Clear previous posts
+    postContainer.innerHTML = '';
+
+    getPosts().then(posts => {
+        posts.forEach(post => {
             renderPostPreview(post, postContainer);
         });
+    }).catch(() => {
+        postContainer.innerHTML = '<p>Could not load posts.</p>';
     });
 }
 
 /**
  * Renders a preview of a single blog post.
- * @param {BlogPost} post
+ * @param {Object} post
  * @param {HTMLElement} postContainer
- * TODO: add commentCount to post data
  */
 function renderPostPreview(post, postContainer) {
     const postComments = comments.filter(
@@ -52,7 +49,7 @@ function renderPostPreview(post, postContainer) {
         <button class="read-more-button" data-post-id="${post.id}" aria-label="Read More">Read More</button>
     `;
 
-    // Add event listener properly instead of inline onclick
+    // Add event listener for "Read More" button
     const button = postElement.querySelector(".read-more-button");
     button.addEventListener("click", () => {
         window.location.href = `post.html?id=${post.id}`;
@@ -60,3 +57,39 @@ function renderPostPreview(post, postContainer) {
 
     postContainer.appendChild(postElement);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.new-post-form');
+
+    // Render posts on page load
+    renderPostPreviews();
+
+    // Handle new post form submission
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Gather form data
+        const formData = new FormData(form);
+        const postData = {
+            title: formData.get('title'),
+            author: formData.get('author'),
+            category: formData.get('category'),
+            content: formData.get('content'),
+            excerpt: formData.get('excerpt'),
+            image: '', // Handle image upload separately if needed
+            date: new Date().toISOString(),
+        };
+
+        // Optional: handle image upload if you want to store image as base64 or URL
+        // const imageFile = formData.get('image');
+        // if (imageFile && imageFile.size > 0) { ... }
+
+        try {
+            await createPost(postData);
+            form.reset();
+            renderPostPreviews(); // Refresh posts list
+        } catch (err) {
+            alert('Failed to create post.');
+        }
+    });
+});
