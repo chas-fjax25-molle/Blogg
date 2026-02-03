@@ -95,6 +95,25 @@ app.post("/login", (req, res) => {
     }
 });
 
+// Check authentication status
+app.get("/me", (req, res) => {
+    // Parse cookies
+    const cookies = req.headers.cookie?.split(";").reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split("=");
+        acc[key] = value;
+        return acc;
+    }, {});
+
+    const token = cookies?.authToken;
+
+    if (token && validateToken(token)) {
+        const user = activeTokens.get(token);
+        res.json({ authenticated: true, user });
+    } else {
+        res.json({ authenticated: false });
+    }
+});
+
 // Custom authentication middleware - runs BEFORE json-server routes
 app.use((req, res, next) => {
     // Allow GET requests without auth

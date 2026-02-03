@@ -182,3 +182,20 @@ export async function login(username, password) {
         throw error;
     }
 }
+
+/**
+ * Check if user is authenticated.
+ *
+ * @returns {Promise<{authenticated: boolean, user?: {id: number, username: string}}>} Authentication status.
+ */
+export async function checkAuth() {
+    try {
+        const response = await fetch(`http://localhost:3000/me`, {
+            credentials: "include",
+        });
+        const data = await response.json();
+        return data; // { authenticated: true/false, user?: {...} }
+    } catch (error) {
+        return { authenticated: false };
+    }
+}
