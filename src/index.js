@@ -1,5 +1,6 @@
 import { comments } from "./comments.js";
 import { createPost, getPosts } from "./post_json_service.js";
+import { login } from "./post_json_service.js";
 
 /**
  * Renders previews of all blog posts on the main page.
@@ -115,6 +116,9 @@ closeBtn.addEventListener("click", () => {
 });
 
 loginBtn.addEventListener("click", () => {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    login(username, password);
     loggedIn = true;
     authBtn.textContent = "Logout";
     modal.style.display = "none";
