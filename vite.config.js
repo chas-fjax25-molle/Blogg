@@ -3,6 +3,30 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ command, mode }) => ({
     base: command === 'build' ? '/Blogg/' : '/',
+
+    server: {
+    middlewareMode: false,
+    middleware: [
+        (req, res, next) => {
+            const path = req.url;
+            
+            // HTML files: no cache
+            if (path.endsWith('.html') || path === '/') {
+                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            }
+            // Static assets: long cache (Vite fingerprints them)
+            else if (/\.(js|css|png|jpg|jpeg|svg|webp|gif|ico|woff2|woff|ttf|eot)$/i.test(path)) {
+                res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+            }
+            // Default: revalidate
+            else {
+                res.setHeader('Cache-Control', 'no-cache');
+            }
+            
+            next();
+        }
+    ]
+},
     plugins: [
         VitePWA({
             registerType: "autoUpdate",
@@ -20,6 +44,7 @@ export default defineConfig(({ command, mode }) => ({
             }
         })
     ],
+    
     build: {
         rollupOptions: {
             input: {

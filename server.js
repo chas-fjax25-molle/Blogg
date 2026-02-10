@@ -26,6 +26,28 @@ const validateToken = (token) => {
 // Create the json-server app
 const app = createApp({ data });
 
+// Cache headers middleware - runs for all requests
+app.use((req, res, next) => {
+    if (req.method !== "GET") return next();
+
+    const path = req.path || "";
+    const match = path.match(/\.([a-z0-9]+)(?:$|\?)/i);
+    const ext = match ? match[1].toLowerCase() : "";
+
+    const longCacheExts = new Set(["js", "css", "png", "jpg", "jpeg", "svg", "webp", "gif", "ico",
+        "woff2", "woff", "ttf", "eot", "map"]);
+
+    if (path === "/" || path.endsWith(".html")) {
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    } else if (longCacheExts.has(ext)) {
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    } else {
+        res.setHeader("Cache-Control", "no-cache");
+    }
+
+    next();
+});
+
 // Custom authentication middleware - insert before other routes
 app.use((req, res, next) => {
     // Allow GET requests and /login without auth
