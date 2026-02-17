@@ -1,15 +1,20 @@
-// Chooses between real API (json-server) and mock read-only API when built for production
-let impl;
-if (import.meta.env && import.meta.env.PROD) {
-    impl = await import("./mock_service.js");
-} else {
-    impl = await import("./post_json_service.js");
-}
+// API facade: use real `post_json_service` during development, but
+// use `mock_service` only for production builds or when running tests.
+import * as realService from "./post_json_service.js";
+import * as mockService from "./mock_service.js";
 
-export const getPosts = impl.getPosts;
-export const getPost = impl.getPost;
-export const createPost = impl.createPost;
-export const getCommentsForPost = impl.getCommentsForPost;
-export const addCommentToPost = impl.addCommentToPost;
-export const login = impl.login;
-export const checkAuth = impl.checkAuth;
+const isTest =
+    typeof process !== "undefined" &&
+    process.env &&
+    process.env.VITEST === "true";
+const isProd = import.meta.env && import.meta.env.PROD;
+
+const impl = isTest || isProd ? mockService : realService;
+
+export const getPosts = (...args) => impl.getPosts(...args);
+export const getPost = (...args) => impl.getPost(...args);
+export const createPost = (...args) => impl.createPost(...args);
+export const getCommentsForPost = (...args) => impl.getCommentsForPost(...args);
+export const addCommentToPost = (...args) => impl.addCommentToPost(...args);
+export const login = (...args) => impl.login(...args);
+export const checkAuth = (...args) => impl.checkAuth(...args);
