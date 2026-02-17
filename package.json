@@ -9,12 +9,18 @@
         "build:gh": "vite build --base=/Blogg/",
         "preview": "vite preview",
         "api": "json-server --watch db.json --port 3000",
-        "server": "node server.js"
+        "server": "node server.js",
+        "test": "vitest",
+        "test:ci": "vitest --run --reporter dot"
     },
     "devDependencies": {
         "@types/json-server": "^0.14.8",
         "json-server": "^1.0.0-beta.5",
         "vite": "^7.2.4",
-        "vite-plugin-pwa": "^1.2.0"
+        "vite-plugin-pwa": "^1.2.0",
+        "vitest": "^1.0.0",
+        "@testing-library/dom": "^8.0.0",
+        "jsdom": "^22.0.0",
+        "whatwg-fetch": "^3.6.2"
     }
 }

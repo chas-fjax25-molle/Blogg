@@ -1,5 +1,5 @@
 import { comments } from "./comments.js";
-import { getPost, login } from "./post_json_service.js";
+import { getPost, login, addCommentToPost } from "./api.js";
 
 try {
     const token = await login("admin", "password123");
@@ -109,32 +109,21 @@ function renderFullPost(post) {
         };
 
         try {
-            const response = await fetch("http://localhost:3000/comments", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newComment),
-            });
-
-            if (response.ok) {
-                const savedComment = await response.json();
-                const li = document.createElement("li");
-                li.className = "comment";
-                li.innerHTML = `
+            const savedComment = await addCommentToPost(newComment);
+            const li = document.createElement("li");
+            li.className = "comment";
+            li.innerHTML = `
                         <p class="comment-author">${savedComment.author}</p>
                         <p class="comment-text">${savedComment.text}</p>
                     `;
-                const noComments = commentList.querySelector(".no-comments");
-                if (noComments) {
-                    noComments.remove();
-                }
-                commentList.prepend(li);
-                commentForm.reset();
-                commentForm.classList.add("hidden");
-                newCommentBtn.classList.remove("hidden");
+            const noComments = commentList.querySelector(".no-comments");
+            if (noComments) {
+                noComments.remove();
             }
+            commentList.prepend(li);
+            commentForm.reset();
+            commentForm.classList.add("hidden");
+            newCommentBtn.classList.remove("hidden");
         } catch (error) {
             console.error("Error submitting comment:", error);
             alert(
