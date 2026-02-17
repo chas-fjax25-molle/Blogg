@@ -1,5 +1,5 @@
 import { comments } from "./comments.js";
-import { createPost, getPosts } from "./post_json_service.js";
+import { createPost, getPosts } from "./api.js";
 
 /**
  * Renders previews of all blog posts on the main page.
@@ -13,15 +13,17 @@ function renderPostPreviews() {
     }
 
     // Clear previous posts
-    postContainer.innerHTML = '';
+    postContainer.innerHTML = "";
 
-    getPosts().then(posts => {
-        posts.forEach(post => {
-            renderPostPreview(post, postContainer);
+    getPosts()
+        .then((posts) => {
+            posts.forEach((post) => {
+                renderPostPreview(post, postContainer);
+            });
+        })
+        .catch(() => {
+            postContainer.innerHTML = "<p>Could not load posts.</p>";
         });
-    }).catch(() => {
-        postContainer.innerHTML = '<p>Could not load posts.</p>';
-    });
 }
 
 /**
@@ -58,25 +60,25 @@ function renderPostPreview(post, postContainer) {
     postContainer.appendChild(postElement);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('.new-post-form');
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector(".new-post-form");
 
     // Render posts on page load
     renderPostPreviews();
 
     // Handle new post form submission
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         // Gather form data
         const formData = new FormData(form);
         const postData = {
-            title: formData.get('title'),
-            author: formData.get('author'),
-            category: formData.get('category'),
-            content: formData.get('content'),
-            excerpt: formData.get('excerpt'),
-            image: '', // Handle image upload separately if needed
+            title: formData.get("title"),
+            author: formData.get("author"),
+            category: formData.get("category"),
+            content: formData.get("content"),
+            excerpt: formData.get("excerpt"),
+            image: "", // Handle image upload separately if needed
             date: new Date().toISOString(),
         };
 
@@ -89,36 +91,36 @@ document.addEventListener('DOMContentLoaded', () => {
             form.reset();
             renderPostPreviews(); // Refresh posts list
         } catch (err) {
-            alert('Failed to create post.');
+            alert("Failed to create post.");
         }
     });
 });
 
 // Simple login logic for admin.html
-document.addEventListener('DOMContentLoaded', () => {
-    const isAdminPage = window.location.pathname.endsWith('admin.html');
-    const loginModal = document.getElementById('loginModal');
-    const adminSection = document.getElementById('adminSection');
-    const authBtn = document.getElementById('authBtn');
-    const closeBtn = document.querySelector('.close-btn');
-    const loginBtn = document.getElementById('loginBtn');
+document.addEventListener("DOMContentLoaded", () => {
+    const isAdminPage = window.location.pathname.endsWith("admin.html");
+    const loginModal = document.getElementById("loginModal");
+    const adminSection = document.getElementById("adminSection");
+    const authBtn = document.getElementById("authBtn");
+    const closeBtn = document.querySelector(".close-btn");
+    const loginBtn = document.getElementById("loginBtn");
 
     function isLoggedIn() {
-        return localStorage.getItem('isAdminLoggedIn') === 'true';
+        return localStorage.getItem("isAdminLoggedIn") === "true";
     }
 
     function showAdmin() {
-        if (adminSection) adminSection.style.display = '';
-        if (loginModal) loginModal.style.display = 'none';
-        if (loginModal) loginModal.setAttribute('aria-hidden', 'true');
-        if (authBtn) authBtn.textContent = 'LOGOUT';
+        if (adminSection) adminSection.style.display = "";
+        if (loginModal) loginModal.style.display = "none";
+        if (loginModal) loginModal.setAttribute("aria-hidden", "true");
+        if (authBtn) authBtn.textContent = "LOGOUT";
     }
 
     function showLogin() {
-        if (adminSection) adminSection.style.display = 'none';
-        if (loginModal) loginModal.style.display = 'block';
-        if (loginModal) loginModal.setAttribute('aria-hidden', 'false');
-        if (authBtn) authBtn.textContent = 'LOGIN';
+        if (adminSection) adminSection.style.display = "none";
+        if (loginModal) loginModal.style.display = "block";
+        if (loginModal) loginModal.setAttribute("aria-hidden", "false");
+        if (authBtn) authBtn.textContent = "LOGIN";
     }
 
     if (isAdminPage) {
@@ -131,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (authBtn) {
             authBtn.onclick = () => {
                 if (isLoggedIn()) {
-                    localStorage.removeItem('isAdminLoggedIn');
+                    localStorage.removeItem("isAdminLoggedIn");
                     window.location.reload();
                 } else {
                     showLogin();
@@ -141,22 +143,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (closeBtn) {
             closeBtn.onclick = () => {
-                loginModal.style.display = 'none';
-                loginModal.setAttribute('aria-hidden', 'true');
+                loginModal.style.display = "none";
+                loginModal.setAttribute("aria-hidden", "true");
             };
         }
 
         if (loginBtn) {
             loginBtn.onclick = (e) => {
                 e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
                 // Simple check, replace with real authentication
-                if (username === 'admin' && password === 'password') {
-                    localStorage.setItem('isAdminLoggedIn', 'true');
+                if (username === "admin" && password === "password") {
+                    localStorage.setItem("isAdminLoggedIn", "true");
                     showAdmin();
                 } else {
-                    alert('Invalid credentials');
+                    alert("Invalid credentials");
                 }
             };
         }
