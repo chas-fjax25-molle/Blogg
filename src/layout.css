@@ -9,7 +9,6 @@ header {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     padding: 1rem;
-
 }
 
 .logo {

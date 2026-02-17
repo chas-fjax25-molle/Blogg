@@ -8,17 +8,12 @@ body {
 }
 
 header h1 {
-    color: white
-}
-
-header {
-    background-color: #3c393d;
-    
+    color: black
 }
 
 .nav-menu a {
     text-transform: uppercase;
-    color: white;
+    color: black;
     letter-spacing: 1px;
     font-weight: 500;
     display: inline-block;
@@ -31,11 +26,11 @@ header {
 
 main {
     text-align: center;
-    padding: 1rem 0;
 }
 
 main h2 {
     font-size: 2rem;
+    margin: 0;
 }
 
 .post-preview {
